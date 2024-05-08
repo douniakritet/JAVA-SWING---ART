@@ -2,6 +2,8 @@ package javaswingdev.form;
 
 import com.mysql.jdbc.PreparedStatement;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -33,6 +35,13 @@ public class Tables extends javax.swing.JPanel {
         init();
         Connect();
         Fetch();
+        textFieldAnimation2.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        String searchTerm = textFieldAnimation2.getText().trim();
+        searchTable(searchTerm);
+    }
+});
         TableActionEvent event = new TableActionEvent() {
             @Override
             public void onEdit(int row) {
@@ -349,7 +358,42 @@ Connection con;
             // Add more specific error handling or logging here
         }
     }//GEN-LAST:event_jButton3jButton1ActionPerformed
+       public void actionPerformed(ActionEvent e) {
+        String searchTerm = textFieldAnimation2.getText().trim();
+        searchTable(searchTerm);
+    }
+       
+    private void searchTable(String searchTerm) {
+    try {
+        // Prepare the SQL statement to search for data in the table
+        String query = "SELECT * FROM oeuvre WHERE idO LIKE ? OR titre LIKE ?";
+        pst = (PreparedStatement) con.prepareStatement(query);
+        pst.setString(1, "%" + searchTerm + "%"); // Search for idO
+        pst.setString(2, "%" + searchTerm + "%"); // Search for titre
+        rs = pst.executeQuery();
 
+        // Clear the table before adding search results
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+
+        // Populate the table with search results
+        while (rs.next()) {
+            Vector<Object> row = new Vector<>();
+            // Add data to the row (adjust column indices as per your table structure)
+            row.add(rs.getString("idO"));
+            row.add(rs.getString("idArtiste"));
+            row.add(rs.getString("titre"));
+            row.add(rs.getString("aneeCreation"));
+            row.add(rs.getString("description"));
+            row.add(rs.getString("prix"));
+            row.add(rs.getString("image"));
+            // Add more columns as needed
+            model.addRow(row);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(Tables.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}
     private void jButton4jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4jButton1ActionPerformed
         // TODO add your handling code here:
         DataExporter.exportDataToXML();

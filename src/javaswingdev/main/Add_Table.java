@@ -9,6 +9,9 @@ import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -293,7 +296,7 @@ public boolean checkInputs() {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
                                                
-  if (checkInputs() /*&& ImgPath != null*/) {
+    if (checkInputs() && ImgPath != null) {
         try {
             String selectedID = (String) IDlist.getSelectedItem();
             String title = titre.getText();
@@ -302,16 +305,20 @@ public boolean checkInputs() {
             String desc = description.getText();
             String prix1 = prix.getText();
             String date2 = dateFormat.format(date1);
-           InputStream img = new FileInputStream(new File(ImgPath));
 
-            PreparedStatement pst = (PreparedStatement) con.prepareStatement("INSERT INTO oeuvre(idArtiste, titre, aneeCreation, description, prix, image)"
-                    + " VALUES(?,?,?,?,?,?)");
+            // Save image file to a specified directory
+            String imageFileName = System.currentTimeMillis() + ".png"; // Generate a unique file name
+            File destFile = new File("C:\\Users\\hp\\OneDrive\\Bureau\\JAVASWING-main\\src\\images" + File.separator + imageFileName);
+            Files.copy(Paths.get(ImgPath), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            // Insert data into the database
+            PreparedStatement pst = (PreparedStatement) con.prepareStatement("INSERT INTO oeuvre(idArtiste, titre, aneeCreation, description, prix, image) VALUES(?,?,?,?,?,?)");
             pst.setString(1, selectedID);
             pst.setString(2, title);
             pst.setString(3, date2);
             pst.setString(4, desc);
             pst.setString(5, prix1);
-            pst.setBlob(6, img);
+            pst.setString(6, destFile.getAbsolutePath()); // Store image file path
 
             int k = pst.executeUpdate();
 

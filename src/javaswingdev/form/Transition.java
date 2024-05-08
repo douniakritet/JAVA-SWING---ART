@@ -2,6 +2,8 @@ package javaswingdev.form;
 
 import com.mysql.jdbc.PreparedStatement;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -31,6 +33,13 @@ public class Transition extends javax.swing.JPanel {
         Connect(); // Connexion à la base de données
     Fetch(); // Récupérer les données de la base de données
     init(); // Initialiser les autres composants personnalisés
+    textFieldAnimation2.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String searchTerm = textFieldAnimation2.getText().trim();
+            searchTransition(searchTerm);
+        }
+    });
 TableActionEvent event = new TableActionEvent() {
             @Override
             public void onEdit(int row) {
@@ -298,7 +307,41 @@ Connection con;
                 .addGap(30, 30, 30))
         );
     }// </editor-fold>//GEN-END:initComponents
+private void searchTransition(String searchTerm) {
+    try {
+        // Prepare the SQL statement to search for transactions
+        String query = "SELECT * FROM transaction WHERE idT LIKE ? OR nomClient LIKE ?";
+        pst = (PreparedStatement) con.prepareStatement(query);
+          pst.setString(1, "%" + searchTerm + "%"); // Search by idT
+        pst.setString(2, "%" + searchTerm + "%"); // Search by nomClient
+        rs = pst.executeQuery();
 
+        // Clear the table before adding search results
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+
+        // Populate the table with search results
+        while (rs.next()) {
+            Vector<Object> row = new Vector<>();
+            row.add(rs.getString("idT"));
+            row.add(rs.getString("idOeuvre"));
+            row.add(rs.getString("idExposition"));
+            row.add(rs.getString("nomClient"));
+            row.add(rs.getString("dateVente"));
+            row.add(rs.getString("statut"));
+            model.addRow(row);
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(Transition.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}
+
+private void textFieldAnimation2ActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+    String searchTerm = textFieldAnimation2.getText().trim();
+    searchTransition(searchTerm);
+}
+    
+    
     private void jButton3jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3jButton1ActionPerformed
         // TODO add your handling code here:
         try {

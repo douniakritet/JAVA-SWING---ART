@@ -6,9 +6,12 @@
 package javaswingdev.main;
 import com.mysql.jdbc.PreparedStatement;
 import java.awt.Image;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -64,20 +67,11 @@ String ImgPath =null;
         }
     }
    public ImageIcon ResizeImage(String imagePath, byte[] pic) {
-    ImageIcon myImage = null;
-    if (imagePath != null) {
-        myImage = new ImageIcon(imagePath);
-    } else {
-        myImage = new ImageIcon(pic);
-    }
-
+     ImageIcon myImage = new ImageIcon(imagePath);
     Image img = myImage.getImage();
-
-    // Resize the image to the specified width and height
     Image img2 = img.getScaledInstance(image.getWidth(), image.getHeight(), Image.SCALE_SMOOTH);
+    return new ImageIcon(img2);
 
-    ImageIcon image = new ImageIcon(img2);
-    return image;
 }
    public void LoadId(){
         try {
@@ -295,27 +289,40 @@ public boolean checkInputs() {
 
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-                                               
-  if (checkInputs() /*&& ImgPath != null*/) {
-       String artiste = IDlist.getSelectedItem().toString(); 
-       String titre = xx.getText(); 
-
-  
+ 
+  if (checkInputs()) {
+        String artiste = IDlist.getSelectedItem().toString();
+        String titre = title.getText();
         Date date1 = date.getDate();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String datee = dateFormat.format(date1);
-        
         String desc = description.getText();
         String price = prix.getText();
-        String img = image.getText();
-
-        // Effectuez la mise à jour dans la base de données
-        updateArtistInDatabase(artiste,titre,datee,desc,price,img);
-      
+        // Check if a new image is selected
+        if (ImgPath != null && !ImgPath.isEmpty()) {
+            // Update the artist in the database with the image path
+            updateArtistInDatabase(artiste, titre, datee, desc, price, ImgPath);
+        } else {
+            // Update the artist in the database without changing the image path
+            updateArtistInDatabase(artiste, titre, datee, desc, price, null);
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "One or more fields are empty");
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    }
     
+  private byte[] getImageBytes(ImageIcon imageIcon) {
+    try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+        oos.writeObject(imageIcon);
+        return baos.toByteArray();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
     public void setArtistData(String idToUpdate, String artiste, String titre, String date2,String desc, String price, String img) {
                 this.idToUpdate = idToUpdate;
 
@@ -331,8 +338,8 @@ public boolean checkInputs() {
         
         description.setText(desc);
         prix.setText(price);
-ImageIcon icon = new ImageIcon(img);
-image.setIcon(icon);
+        ImageIcon icon = new ImageIcon(img);
+        image.setIcon(icon);
         // Définissez les valeurs des éléments de l'interface utilisateur
         IDlist.setSelectedItem(selectedTable);
       
@@ -340,67 +347,44 @@ image.setIcon(icon);
     } catch (ParseException ex) {
         Logger.getLogger(Update_Exposition.class.getName()).log(Level.SEVERE, null, ex);
     }    }
-   /* public void setArtistData(String idToUpdate, String artiste, String titre, String date2, String desc, String price, String imgPath) {
-    this.idToUpdate = idToUpdate;
+   
 
-    // Utilisez SimpleDateFormat pour convertir la date de naissance de String en Date
+   private void updateArtistInDatabase(String artiste, String title, String date, String desc, String price, String imagePath) {
     try {
-        // Stockez les valeurs récupérées dans des variables
-        String selectedTable = artiste;
-        title.setText(titre);
-
-        Date date1 = new SimpleDateFormat("yyyy-MM-dd").parse(date2);
-        date.setDate(date1);
-
-        description.setText(desc);
-        prix.setText(price);
-        
-        // Charger l'image à partir du chemin imgPath
-        ImageIcon icon = new ImageIcon(imgPath);
-        // Définir l'icône sur le composant JLabel
-        image.setIcon(icon);
-
-        // Redimensionner l'image pour s'adapter au composant JLabel
-        Image img = icon.getImage().getScaledInstance(image.getWidth(), image.getHeight(), Image.SCALE_SMOOTH);
-        // Créer une nouvelle icône à partir de l'image redimensionnée
-        ImageIcon imageIcon = new ImageIcon(img);
-        // Définir l'icône redimensionnée sur le composant JLabel
-        image.setIcon(imageIcon);
-
-
-        // Définissez les valeurs des éléments de l'interface utilisateur
-        IDlist.setSelectedItem(selectedTable);
-
-    } catch (ParseException ex) {
-        Logger.getLogger(Update_Exposition.class.getName()).log(Level.SEVERE, null, ex);
-    }
-}*/
-
-    
-    
-    private void updateArtistInDatabase( String artiste, String title, String date, String desc, String price,String img) {
-        try {
-            // Préparez la requête SQL pour mettre à jour l'artiste
-            String query = "UPDATE oeuvre SET idArtiste=?, titre=?,aneeCreation=?,description=?,prix=?,image=? WHERE idO=?";
-            pst = (PreparedStatement) con.prepareStatement(query);
-            pst.setString(1, artiste);
-            pst.setString(2, title);
-            pst.setString(3, date);
-            pst.setString(4, desc);
-            pst.setString(5, price);
-            pst.setString(6, img);
-
-            // Set the idToUpdate in the query
-            pst.setString(7, idToUpdate);
-
-            // Exécutez la requête de mise à jour
-            int rowsAffected = pst.executeUpdate();
-
-            // Rest of your method...
-        } catch (SQLException ex) {
-            Logger.getLogger(Update_Arrr.class.getName()).log(Level.SEVERE, null, ex);
+        String query;
+        if (imagePath == null || imagePath.isEmpty()) {
+            // Query to update all fields except the image
+            query = "UPDATE oeuvre SET idArtiste=?, titre=?, aneeCreation=?, description=?, prix=? WHERE idO=?";
+        } else {
+            // Query to update all fields including the image path
+            query = "UPDATE oeuvre SET idArtiste=?, titre=?, aneeCreation=?, description=?, prix=?, image=? WHERE idO=?";
         }
-   }
+        pst = (PreparedStatement) con.prepareStatement(query);
+        pst.setString(1, artiste);
+        pst.setString(2, title);
+        pst.setString(3, date);
+        pst.setString(4, desc);
+        pst.setString(5, price);
+        if (imagePath != null && !imagePath.isEmpty()) {
+            pst.setString(6, imagePath);
+            pst.setString(7, idToUpdate);
+        } else {
+            pst.setString(6, idToUpdate);
+        }
+
+        int rowsAffected = pst.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(this, "Data updated successfully");
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to update data");
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(Update_Table.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (Exception ex) {
+        Logger.getLogger(Update_Table.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}
+   
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         JFileChooser file = new JFileChooser();

@@ -321,13 +321,15 @@ java.sql.PreparedStatement pst;
         }
     }                                                
 
-    private void searchExposition(String searchTerm) {
+
+   private void searchExposition(String searchTerm) {
     try {
         // Prepare the SQL statement to search for expositions
-        String query = "SELECT * FROM exposition WHERE nom LIKE ? OR lieu LIKE ?";
+        String query = "SELECT * FROM exposition WHERE nom LIKE ? OR lieu LIKE ? OR idE LIKE ?";
         pst = con.prepareStatement(query);
         pst.setString(1, "%" + searchTerm + "%"); // Search by name
         pst.setString(2, "%" + searchTerm + "%"); // Search by location
+        pst.setString(3, "%" + searchTerm + "%"); // Search by idE
         rs = pst.executeQuery();
 
         // Clear the table before adding search results
@@ -348,10 +350,13 @@ java.sql.PreparedStatement pst;
         Logger.getLogger(Exposition.class.getName()).log(Level.SEVERE, null, ex);
     }
 }
-    private void textFieldAnimation1ActionPerformed(java.awt.event.ActionEvent evt) {                                                    
-        String searchTerm = textFieldAnimation1.getText().trim();
+
+private void textFieldAnimation1ActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+    String searchTerm = textFieldAnimation1.getText().trim();
     searchExposition(searchTerm);
-    }                                                   
+}
+    
+                                                      
 
     // Variables declaration - do not modify                     
     private javaswingdev.card.Card card1;
