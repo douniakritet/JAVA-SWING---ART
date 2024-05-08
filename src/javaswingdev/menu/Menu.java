@@ -43,10 +43,11 @@ public class Menu extends JPanel {
         addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.DASHBOARD, "Dashboard"));
         addTitle("TASKS");
         //addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.MAIL_OUTLINE, "Email", "Inbox", "Read", "Compose"));
-        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.PERSON, "Artistes"));
-        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.TAB, "Tables")); 
-        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.EXPOSURE, "Exposition"));
+        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.PERSON, "Artists"));
+        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.IMAGE, "Artworks")); 
+        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.EVENT, "Exposition"));
         addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.SEND, "Transition")); 
+        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.IMPORT_EXPORT, "Import")); 
         addTitle("Action");
         addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.EXIT_TO_APP ,"Lougout")); 
  }

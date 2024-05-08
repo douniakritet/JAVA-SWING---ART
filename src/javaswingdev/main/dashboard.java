@@ -5,12 +5,13 @@ import javaswingdev.form.Artistes;
 import javaswingdev.form.Exposition;
 import javaswingdev.form.Form_Dashboard;
 import javaswingdev.form.Form_Empty;
+import javaswingdev.form.ImportArtist;
 import javaswingdev.form.Tables;
 import javaswingdev.form.Transition;
 import javaswingdev.menu.EventMenuSelected;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-
+import javaswingdev.form.Statistiques;
 public class dashboard extends javax.swing.JFrame {
     
     private static dashboard main;
@@ -39,8 +40,9 @@ private void init() {
 
             }else if(index==4) {
           showForm(new Transition());
-
-                
+          } else if(index == 5) { // Ajout de la condition pour l'élément "Import"
+        // Redirection vers la fonction d'importation ici
+           ImportArtist.main(null); // Redirection vers ArtistSwingApp
             }else{
              setVisible(false);
                     login l = new login();

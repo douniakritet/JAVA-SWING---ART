@@ -338,25 +338,15 @@ java.sql.PreparedStatement pst;
     private void init() {
         table.fixTable(jScrollPane1);
          
-      /*  table.addRow(new Object[]{"1", "Mike Bhand", "mikebhand@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"2", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
-        table.addRow(new Object[]{"3", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
-        table.addRow(new Object[]{"4", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"5", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"6", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
-        table.addRow(new Object[]{"7", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
-        table.addRow(new Object[]{"8", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"9", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"10", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"11", "Andrew Strauss", "andrewstrauss@gmail.com", "Editor", "25 Apr,2018"});
-        table.addRow(new Object[]{"12", "Ross Kopelman", "rosskopelman@gmail.com", "Subscriber", "25 Apr,2018"});
-        table.addRow(new Object[]{"13", "Mike Hussy", "mikehussy@gmail.com", "Admin", "25 Apr,2018"});
-        table.addRow(new Object[]{"14", "Kevin Pietersen", "kevinpietersen@gmail.com", "Admin", "25 Apr,2018"});
-*/
-        //  init card data
-        card1.setData(new ModelCard(null, null, null, "$ 500.00", "Report Income Monthly"));
-        card2.setData(new ModelCard(null, null, null, "$ 800.00", "Report Expense Monthly"));
-        card3.setData(new ModelCard(null, null, null, "$ 300.00", "Report Profit Monthly"));
+       //  init card data
+        int totalArtists = Statistiques.getTotalArtists();
+      card1.setData(new ModelCard(null, null, null, totalArtists + "", "Artistes"));
+
+      int totalArtworks = Statistiques.getTotalArtworks();
+      card2.setData(new ModelCard(null, null, null, totalArtworks + " ", "Artworks"));
+
+      int totalExhibitions = Statistiques.getTotalExhibitions();
+      card3.setData(new ModelCard(null, null, null, totalExhibitions + " ", "Expositions"));
     }
 
     @SuppressWarnings("unchecked")
@@ -374,13 +364,15 @@ java.sql.PreparedStatement pst;
 
         setOpaque(false);
 
+        card1.setIcon(javaswingdev.GoogleMaterialDesignIcon.PERSON);
+
         card2.setColor1(new java.awt.Color(95, 211, 226));
         card2.setColor2(new java.awt.Color(26, 166, 170));
-        card2.setIcon(javaswingdev.GoogleMaterialDesignIcon.PIE_CHART);
+        card2.setIcon(javaswingdev.GoogleMaterialDesignIcon.IMAGE);
 
         card3.setColor1(new java.awt.Color(95, 243, 140));
         card3.setColor2(new java.awt.Color(3, 157, 27));
-        card3.setIcon(javaswingdev.GoogleMaterialDesignIcon.RING_VOLUME);
+        card3.setIcon(javaswingdev.GoogleMaterialDesignIcon.EVENT);
 
         roundPanel1.setBackground(new java.awt.Color(255, 255, 255));
         roundPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));

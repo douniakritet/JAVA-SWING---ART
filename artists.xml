@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/XML/XMLDocument.xml to edit this template
+-->
+<artists>
+<artist>
+<id>1</id>
+<name>Zainab Rsf</name>
+<nationality>Moroccan</nationality>
+<birthdate>2002-05-04</birthdate>
+</artist>
+<artist>
+<id>2</id>
+<name>Marwa Rsf</name>
+<nationality>Moroccan</nationality>
+<birthdate>2008-07-21</birthdate>
+</artist>
+</artists>

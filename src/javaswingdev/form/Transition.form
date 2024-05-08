@@ -59,6 +59,11 @@
   </Layout>
   <SubComponents>
     <Component class="javaswingdev.card.Card" name="card1">
+      <Properties>
+        <Property name="icon" type="javaswingdev.GoogleMaterialDesignIcon" editor="org.netbeans.modules.form.editors.EnumEditor">
+          <Value id="PERSON"/>
+        </Property>
+      </Properties>
     </Component>
     <Component class="javaswingdev.card.Card" name="card2">
       <Properties>
@@ -69,7 +74,7 @@
           <Color blue="aa" green="a6" red="1a" type="rgb"/>
         </Property>
         <Property name="icon" type="javaswingdev.GoogleMaterialDesignIcon" editor="org.netbeans.modules.form.editors.EnumEditor">
-          <Value id="PIE_CHART"/>
+          <Value id="IMAGE"/>
         </Property>
       </Properties>
     </Component>
@@ -82,7 +87,7 @@
           <Color blue="1b" green="9d" red="3" type="rgb"/>
         </Property>
         <Property name="icon" type="javaswingdev.GoogleMaterialDesignIcon" editor="org.netbeans.modules.form.editors.EnumEditor">
-          <Value id="RING_VOLUME"/>
+          <Value id="EVENT"/>
         </Property>
       </Properties>
     </Component>

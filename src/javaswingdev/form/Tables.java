@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.transform.TransformerException;
 import raven.cell.TableActionCellEditor;
 import raven.cell.TableActionCellRender;
 import raven.cell.TableActionEvent;
@@ -154,9 +155,14 @@ public class Tables extends javax.swing.JPanel {
         table.fixTable(jScrollPane1);
         
         //  init card data
-        card1.setData(new ModelCard(null, null, null, "$ 500.00", "Report Income Monthly"));
-        card2.setData(new ModelCard(null, null, null, "$ 800.00", "Report Expense Monthly"));
-        card3.setData(new ModelCard(null, null, null, "$ 300.00", "Report Profit Monthly"));
+        int totalArtists = Statistiques.getTotalArtists();
+      card1.setData(new ModelCard(null, null, null, totalArtists + "", "Artists"));
+
+      int totalArtworks = Statistiques.getTotalArtworks();
+      card2.setData(new ModelCard(null, null, null, totalArtworks + " ", "Artworks"));
+
+      int totalExhibitions = Statistiques.getTotalExhibitions();
+      card3.setData(new ModelCard(null, null, null, totalExhibitions + " ", "Expositions"));
     }
 Connection con;
     com.mysql.jdbc.PreparedStatement pst;
@@ -205,17 +211,20 @@ Connection con;
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javaswingdev.swing.table.Table();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         textFieldAnimation2 = new swing.TextFieldAnimation();
 
         setOpaque(false);
 
+        card1.setIcon(javaswingdev.GoogleMaterialDesignIcon.PERSON);
+
         card2.setColor1(new java.awt.Color(95, 211, 226));
         card2.setColor2(new java.awt.Color(26, 166, 170));
-        card2.setIcon(javaswingdev.GoogleMaterialDesignIcon.PIE_CHART);
+        card2.setIcon(javaswingdev.GoogleMaterialDesignIcon.IMAGE);
 
         card3.setColor1(new java.awt.Color(95, 243, 140));
         card3.setColor2(new java.awt.Color(3, 157, 27));
-        card3.setIcon(javaswingdev.GoogleMaterialDesignIcon.RING_VOLUME);
+        card3.setIcon(javaswingdev.GoogleMaterialDesignIcon.EVENT);
 
         roundPanel1.setBackground(new java.awt.Color(255, 255, 255));
         roundPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -252,6 +261,19 @@ Connection con;
             }
         });
 
+        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(25, 118, 211));
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/icons8-exporter-30 (1).png"))); // NOI18N
+        jButton4.setText("Export");
+        jButton4.setBorder(null);
+        jButton4.setContentAreaFilled(false);
+        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout roundPanel1Layout = new javax.swing.GroupLayout(roundPanel1);
         roundPanel1.setLayout(roundPanel1Layout);
         roundPanel1Layout.setHorizontalGroup(
@@ -262,6 +284,8 @@ Connection con;
                     .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roundPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -269,8 +293,10 @@ Connection con;
             roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(roundPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(roundPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addGap(42, 42, 42)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -324,11 +350,17 @@ Connection con;
         }
     }//GEN-LAST:event_jButton3jButton1ActionPerformed
 
+    private void jButton4jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4jButton1ActionPerformed
+        // TODO add your handling code here:
+        DataExporter.exportDataToXML();
+    }//GEN-LAST:event_jButton4jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javaswingdev.card.Card card1;
     private javaswingdev.card.Card card2;
     private javaswingdev.card.Card card3;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JScrollPane jScrollPane1;
     private javaswingdev.swing.RoundPanel roundPanel1;
     private javaswingdev.swing.table.Table table;

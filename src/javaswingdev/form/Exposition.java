@@ -139,10 +139,15 @@ TableActionEvent event = new TableActionEvent() {
         table.fixTable(jScrollPane1);
         
 
-        //  init card data
-        card1.setData(new ModelCard(null, null, null, "$ 500.00", "Report Income Monthly"));
-        card2.setData(new ModelCard(null, null, null, "$ 800.00", "Report Expense Monthly"));
-        card3.setData(new ModelCard(null, null, null, "$ 300.00", "Report Profit Monthly"));
+       //  init card data
+        int totalArtists = Statistiques.getTotalArtists();
+      card1.setData(new ModelCard(null, null, null, totalArtists + "", "Artists"));
+
+      int totalArtworks = Statistiques.getTotalArtworks();
+      card2.setData(new ModelCard(null, null, null, totalArtworks + " ", "Artworks"));
+
+      int totalExhibitions = Statistiques.getTotalExhibitions();
+      card3.setData(new ModelCard(null, null, null, totalExhibitions + " ", "Expositions"));
     }
 java.sql.Connection con;
 java.sql.PreparedStatement pst;
@@ -195,13 +200,15 @@ java.sql.PreparedStatement pst;
 
         setOpaque(false);
 
+        card1.setIcon(javaswingdev.GoogleMaterialDesignIcon.PERSON);
+
         card2.setColor1(new java.awt.Color(95, 211, 226));
         card2.setColor2(new java.awt.Color(26, 166, 170));
-        card2.setIcon(javaswingdev.GoogleMaterialDesignIcon.PIE_CHART);
+        card2.setIcon(javaswingdev.GoogleMaterialDesignIcon.IMAGE);
 
         card3.setColor1(new java.awt.Color(95, 243, 140));
         card3.setColor2(new java.awt.Color(3, 157, 27));
-        card3.setIcon(javaswingdev.GoogleMaterialDesignIcon.RING_VOLUME);
+        card3.setIcon(javaswingdev.GoogleMaterialDesignIcon.EVENT);
 
         roundPanel1.setBackground(new java.awt.Color(255, 255, 255));
         roundPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
